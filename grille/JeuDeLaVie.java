@@ -4,16 +4,19 @@ import Univ_JeuDeLaVie_Java.grille.cellules.Cellule;
 import Univ_JeuDeLaVie_Java.grille.cellules.CelluleEtatMort;
 import Univ_JeuDeLaVie_Java.grille.cellules.CelluleEtatVivant;
 import Univ_JeuDeLaVie_Java.grille.commandes.Commande;
+import Univ_JeuDeLaVie_Java.grille.observeurs.Observable;
+import Univ_JeuDeLaVie_Java.grille.observeurs.Observateur;
 import Univ_JeuDeLaVie_Java.grille.visiteurs.Visiteur;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class JeuDeLaVie implements Observable {
     private Cellule[][] grille;
     private int xMax;
     private int yMax;
-    private Observateur[] observateurs;
-    private Commande[] commandes;
+    private Observateur[] observateurs = new Observateur[0];
+    private ArrayList<Commande> commandes = new ArrayList<Commande>();
     private Visiteur visiteur;
 
     public JeuDeLaVie(int largeur, int hauteur) {
@@ -27,7 +30,7 @@ public class JeuDeLaVie implements Observable {
         Random random = new Random();
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
-                if (random.nextBoolean()) { // Génération aléatoire 50%
+                if ((i < 250 || i > grille.length-250 || j < 250 || j > grille[i].length-250) ||  random.nextBoolean()) { // Génération aléatoire 50%
                     grille[i][j] = new Cellule(i, j, CelluleEtatMort.getInstance());
                 } else {
                     grille[i][j] = new Cellule(i, j, CelluleEtatVivant.getInstance());
@@ -51,6 +54,7 @@ public class JeuDeLaVie implements Observable {
         return yMax;
     }
 
+    @Override
     public void attacheObservateur(Observateur o) {
         Observateur[] newObservateurs = new Observateur[observateurs.length + 1];
         System.arraycopy(observateurs, 0, newObservateurs, 0, observateurs.length);
@@ -58,6 +62,7 @@ public class JeuDeLaVie implements Observable {
         observateurs = newObservateurs;
     }
 
+    @Override
     public void detacheObservateur(Observateur o) {
         Observateur[] newObservateurs = new Observateur[observateurs.length - 1];
         int index = 0;
@@ -69,6 +74,7 @@ public class JeuDeLaVie implements Observable {
         observateurs = newObservateurs;
     }
 
+    @Override
     public void notifieObservateurs() {
         for (Observateur obs : observateurs) {
             obs.actualise();
@@ -76,17 +82,14 @@ public class JeuDeLaVie implements Observable {
     }
 
     public void ajouterCommande(Commande commande) {
-        Commande[] newCommandes = new Commande[commandes.length + 1];
-        System.arraycopy(commandes, 0, newCommandes, 0, commandes.length);
-        newCommandes[commandes.length] = commande;
-        commandes = newCommandes;
+        commandes.add(commande);
     }
 
     public void executerCommandes() {
         for (Commande cmd : commandes) {
             cmd.executer();
         }
-        notifieObservateurs();
+        commandes = new ArrayList<Commande>();
     }
 
     public void distribueVisiteur(Visiteur visiteur) {
@@ -100,7 +103,7 @@ public class JeuDeLaVie implements Observable {
 
     public void calculerGenerationSuivante() {
         // Distribuer un visiteur
-        distribueVisiteur(visiteur);
+        distribueVisiteur(this.visiteur);
 
         // Exécuter les commandes
         executerCommandes();

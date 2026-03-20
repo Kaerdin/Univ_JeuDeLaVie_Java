@@ -2,7 +2,7 @@ package Univ_JeuDeLaVie_Java.grille.commandes;
 import Univ_JeuDeLaVie_Java.grille.cellules.Cellule;
 
 public class Commande {
-    private Cellule cellule;
+    protected Cellule cellule;
 
     public Commande(Cellule cellule) {
         this.cellule = cellule;

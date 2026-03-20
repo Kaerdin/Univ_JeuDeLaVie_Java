@@ -29,7 +29,7 @@ public class Cellule{
         int count = 0;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) continue; // Ignore elle-même
+                if (i == 0 && j == 0) continue;
                 Cellule voisine = jeu.getGrilleXY(x + i, y + j);
                 if (voisine != null && voisine.estVivante()) {
                     count++;

@@ -12,17 +12,18 @@ Une cellule vivante doit mourrir si :
 Une cellule morte doit revenir à la vie si :
     - Elle a exactement 3 voisins vivants
 */
-public class VisiteurClassique extends Visiteur {
+public class VisiteurDayAndNight extends Visiteur {
 
-
-    public VisiteurClassique() {
+    public VisiteurDayAndNight() {
 
     };
 
     public void visiterCelluleVivante(Cellule cellule) {
         int voisinsVivants = cellule.nombreVoisinesVivantes(jeu);
 
-        if (voisinsVivants < 2 || voisinsVivants > 3) {
+        if (voisinsVivants != 3 && voisinsVivants != 4 &&
+            voisinsVivants != 6 && voisinsVivants != 7 &&
+            voisinsVivants != 8) {
             jeu.ajouterCommande(new CommandeMeurt(cellule));
         }
     }
@@ -30,7 +31,8 @@ public class VisiteurClassique extends Visiteur {
     public void visiterCelluleMorte(Cellule cellule) {
         int voisinsVivants = cellule.nombreVoisinesVivantes(jeu);
 
-        if (voisinsVivants == 3) {
+        if (voisinsVivants == 3 || voisinsVivants == 6 ||
+            voisinsVivants == 7 || voisinsVivants == 8) {
             jeu.ajouterCommande(new CommandeVit(cellule));
         }
     }
