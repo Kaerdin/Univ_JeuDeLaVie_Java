@@ -61,7 +61,7 @@ public class PaintController {
                 switch (mode) {
                     case PINCEAU -> jeu.getGrilleXY(x, y).vit();
                     case GOMME -> jeu.getGrilleXY(x, y).meurt();
-                    case SOURIS -> {} // optionnel
+                    case SOURIS -> {}
                 }
             }
         }

@@ -22,6 +22,6 @@ public class VisiteurVictorDestruction extends Visiteur {
     }
 
     public void visiterCelluleMorte(Cellule cellule) {
-        // Victor ne sème que la mort, il n'a pas besoin de donner vie 
+        // Victor ne sème que la Mort, il n'a pas besoin de donner vie 
     }
 }

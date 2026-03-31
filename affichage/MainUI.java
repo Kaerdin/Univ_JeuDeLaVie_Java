@@ -66,7 +66,7 @@ public class MainUI extends JFrame {
             jeuUI,
             scrollMenu
         );
-        // Ratio 80 / 20
+        
         splitPane.setOneTouchExpandable(false); // pas de petites flèches pour extend ou fermer
         
         jeuUI.setMinimumSize(new java.awt.Dimension(900, 0)); // largeur min
