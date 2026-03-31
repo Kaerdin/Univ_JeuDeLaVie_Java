@@ -98,10 +98,7 @@ public class MenuPanel extends JPanel {
         // #####################################################################
         // Ajout de skibidi
         JLabel imageLabel = new JLabel();
-        ImageIcon icon = new ImageIcon(getClass().getResource("../assets/img/skibidi.png"));
-        imageLabel.setIcon(icon);
-        imageLabel.setAlignmentX(CENTER_ALIGNMENT); // centre dans BoxLayout vertical
-        Image img = icon.getImage();
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Univ_JeuDeLaVie_Java/assets/img/skibidi.png"));Image img = icon.getImage();
         Image scaledImg = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH); // taille voulue
         imageLabel.setIcon(new ImageIcon(scaledImg));
 
