@@ -3,6 +3,7 @@ import Univ_JeuDeLaVie_Java.grille.JeuDeLaVie;
 import Univ_JeuDeLaVie_Java.grille.observeurs.Observateur;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Random;
 import java.awt.Color;
 
@@ -74,6 +75,10 @@ public class JeuDeLaVieUI extends JPanel implements Observateur{
     public double getOffsetY(){
         return offsetY;
     }
+    
+    public JeuDeLaVie getJeu(){
+        return jeu;
+    }
 
     public void actualise(){
         repaint();
@@ -85,6 +90,19 @@ public class JeuDeLaVieUI extends JPanel implements Observateur{
         setBackground(Color.BLACK);
 
         Random random = new Random();
+
+        int width = (int)(jeu.getXMax() * scale);
+        int height = (int)(jeu.getYMax() * scale);
+
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(Color.WHITE);
+        g2d.setStroke(new java.awt.BasicStroke(5));
+        g2d.drawRect((int) offsetX, (int) offsetY, width, height);
+
+
+        g.setColor(Color.WHITE);
+        g.drawRect((int)offsetX, (int)offsetY, width, height);
 
         for(int i = 0; i < jeu.getXMax(); i++) {
             for(int j = 0; j < jeu.getYMax(); j++) {

@@ -18,6 +18,10 @@ public class PaintController {
         System.out.println("Brush size : " + brushSize);
     }
 
+    public int getBrushSize(){
+        return this.brushSize;
+    }
+
     public PaintController(JeuDeLaVieUI jeuUI, JeuDeLaVie jeu) {
         this.jeuUI = jeuUI;
         this.jeu = jeu;

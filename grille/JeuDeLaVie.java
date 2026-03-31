@@ -18,6 +18,7 @@ public class JeuDeLaVie implements Observable {
     private Observateur[] observateurs = new Observateur[0];
     private ArrayList<Commande> commandes = new ArrayList<Commande>();
     private Visiteur visiteur;
+    private int generationCourrante = 0;
 
     public JeuDeLaVie(int largeur, int hauteur) {
         this.xMax = largeur;
@@ -26,7 +27,7 @@ public class JeuDeLaVie implements Observable {
         initialiserGrille();
     }
 
-    private void initialiserGrille() {
+    public void initialiserGrille() {
         Random random = new Random();
         for (int i = 0; i < grille.length; i++) {
             for (int j = 0; j < grille[i].length; j++) {
@@ -37,6 +38,27 @@ public class JeuDeLaVie implements Observable {
                 }
             }
         }
+        this.generationCourrante = 0;
+        notifieObservateurs();
+    }
+
+    public void viderGrille() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                grille[i][j] = new Cellule(i, j, CelluleEtatMort.getInstance());
+            }
+        }
+        notifieObservateurs();
+        this.generationCourrante = 0;
+    }
+    public void remplirGrille() {
+        for (int i = 0; i < grille.length; i++) {
+            for (int j = 0; j < grille[i].length; j++) {
+                grille[i][j] = new Cellule(i, j, CelluleEtatVivant.getInstance());
+            }
+        }
+        notifieObservateurs();
+        this.generationCourrante = 0;
     }
 
     public Cellule getGrilleXY(int x, int y) {
@@ -107,8 +129,11 @@ public class JeuDeLaVie implements Observable {
 
         // Exécuter les commandes
         executerCommandes();
-
+        
         // Actualisez les observateurs
         notifieObservateurs();
+
+        this.generationCourrante += 1;
+        System.out.println(generationCourrante);
     }
 }

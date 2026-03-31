@@ -22,6 +22,26 @@ public class MenuPanel extends JPanel {
         setBackground(new Color(25, 25, 25));
 
         // #####################################################################
+        // MODE DE JEU (dropdown)
+
+        add(createLabel("Mode de jeu", 40f, Color.WHITE));
+
+        String[] modes = {"Classique", "Day & Night", "HighLife", "Victor Annihilation", "Pandémie du Covid-19"};
+
+        JComboBox<String> modeDropdown = createDropdown(modes, selected -> {
+            switch (selected) {
+                case "Classique" -> mainUI.setRegle(MainUI.Regle.CLASSIQUE);
+                case "Day & Night" -> mainUI.setRegle(MainUI.Regle.DAY_AND_NIGHT);
+                case "HighLife" -> mainUI.setRegle(MainUI.Regle.HIGHLIFE);
+                case "Victor Annihilation" -> mainUI.setRegle(MainUI.Regle.VICTOR);
+                case "Pandémie du Covid-19" -> mainUI.setRegle(MainUI.Regle.COVID);
+            }
+        });
+
+        add(modeDropdown);
+        add(Box.createRigidArea(new Dimension(0, 20)));
+
+        // #####################################################################
         // BOUTONS
         JButton sourisBtn = createModernButton("Souris");
         JButton pinceauBtn = createModernButton("Pinceau");
@@ -53,8 +73,27 @@ public class MenuPanel extends JPanel {
         playBtn.addActionListener(e -> mainUI.play());
 
         // Bouton Pause
-        JButton pauseBtn = createModernButton("Pause");
+        JButton pauseBtn = createModernButton("Stop");
         pauseBtn.addActionListener(e -> mainUI.pause());
+        
+        // Bouton NextStep
+        JButton nextStep = createModernButton("Next Step");
+        nextStep.addActionListener(e -> mainUI.nextStep());
+        
+        // #####################################################################
+        // Bouton Reset
+        JButton resetBtn = createModernButton("Reset Grid");
+        resetBtn.addActionListener(e -> jeuUI.getJeu().viderGrille());
+
+        // #####################################################################
+        // Bouton Reset
+        JButton fillBtn = createModernButton("Fill Grid");
+        fillBtn.addActionListener(e -> jeuUI.getJeu().remplirGrille());
+
+        // #####################################################################
+        // Bouton Newgrid
+        JButton newGrid = createModernButton("New Grid");
+        newGrid.addActionListener(e -> jeuUI.getJeu().initialiserGrille());
 
         // #####################################################################
         // Ajout de skibidi
@@ -116,11 +155,19 @@ public class MenuPanel extends JPanel {
         add(modePanel);
         add(Box.createRigidArea(new Dimension(0, 20))); // espace après
 
-        // Ajout des composants
+        // Boutons Jouer / Pause / reset
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(playBtn);
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(pauseBtn);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(nextStep);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(resetBtn);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(fillBtn);
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(newGrid);
 
         // Label vitesse
         add(createLabel("Vitesse", 50f, Color.WHITE));
@@ -136,6 +183,7 @@ public class MenuPanel extends JPanel {
         add(gSlider);
         add(createLabel("Bleu", 30f, Color.BLUE));
         add(bSlider);
+        add(Box.createRigidArea(new Dimension(0, 200)));
         // #####################################################################
     }
 
@@ -181,7 +229,9 @@ public class MenuPanel extends JPanel {
     }
 
     private JSlider createModernSlider(int min, int max, int value) {
+
         JSlider slider = new JSlider(min, max, value);
+
         slider.setMajorTickSpacing((max - min) / 5);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
@@ -189,5 +239,43 @@ public class MenuPanel extends JPanel {
         slider.setForeground(Color.WHITE); // labels blancs
         slider.setFont(slider.getFont().deriveFont(12f));
         return slider;
+    }
+
+    private JComboBox<String> createDropdown(String[] options, java.util.function.Consumer<String> onSelect) {
+
+        JComboBox<String> comboBox = new JComboBox<>(options);
+
+        comboBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        comboBox.setBackground(new Color(40, 40, 40));
+        comboBox.setForeground(Color.WHITE);
+        comboBox.setFont(comboBox.getFont().deriveFont(14f));
+        comboBox.setFocusable(false);
+
+        // Renderer pour style des items
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+
+                Component c = super.getListCellRendererComponent(
+                        list, value, index, isSelected, cellHasFocus);
+
+                c.setBackground(isSelected ? new Color(70, 70, 70) : new Color(40, 40, 40));
+                c.setForeground(Color.WHITE);
+
+                return c;
+            }
+        });
+
+        // Action
+        comboBox.addActionListener(e -> {
+            String selected = (String) comboBox.getSelectedItem();
+            if (selected != null && onSelect != null) {
+                onSelect.accept(selected);
+            }
+        });
+
+        return comboBox;
     }
 }
